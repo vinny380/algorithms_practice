@@ -27,6 +27,14 @@ class tree:
       traversal = self.preorder_print(start.right, traversal)
     return traversal
 
+  def max_value(self):
+    start = self.root
+    while start.right:
+        start = start.right
+        if start.right == None:
+          acc = start
+    return acc.value
+
 
 tree = tree(10)
 tree.root.left = tree_node(5)
@@ -35,10 +43,12 @@ tree.root.left.left = tree_node(3)
 tree.root.left.right = tree_node(7)
 tree.root.right.left = tree_node(17)
 tree.root.right.right = tree_node(22)
+tree.root.right.right.right= tree_node(44)
+print(tree.max_value())
 
 # NLR
 #10 - 5 - 3 - 7 - 20 - 17 - 22
 #LNR
 #3 - 5 - 7 - 10 - 17 - 20 - 22 
 
-tree.traversal('inorder')
+# tree.traversal('inorder')
