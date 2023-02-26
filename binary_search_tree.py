@@ -18,12 +18,10 @@ class BST:
 
         while start != None:
             acc = start
-
             if value > start.value:
                 start = start.right
             elif value < start.value:
                 start = start.left
-
             
         if acc == None:
             acc = new_node
@@ -37,6 +35,10 @@ class BST:
 
     def max_value(self):
         start = self.root
+        if start.right == None and start.left == None:
+            return start.value
+        if start.right == None:
+            return start.value
         while start.right:
             start = start.right
             if start.right == None:
@@ -45,6 +47,10 @@ class BST:
 
     def min_value(self):
         start = self.root
+        if start.right == None and start.left == None:
+            return start.value
+        if start.left == None:
+            return start.value
         while start.left:
             start = start.left
             if start.left == None:
@@ -73,6 +79,8 @@ class BST:
 
 tree = BST(10)
 tree.insert(30)
+tree.insert(6)
+tree.insert(100)
 tree.insert(25)
 tree.insert(50)
 print(tree.max_value())
