@@ -77,10 +77,36 @@ class BST:
             traversal = self.preorder_print(start.right, traversal)
         return traversal     
 
-tree = BST(10)
-tree.insert(30)
-tree.insert(6)
-tree.insert(100)
-tree.insert(25)
-tree.insert(50)
-print(tree.max_value())
+    def delete(self, value, start):
+        acc = None 
+        if start.value == value:
+            if start.right != None:
+                acc = start.right
+            elif (start.right == None) and start.left != None:
+                acc = start.left
+            else:
+                acc = None
+            return acc
+        if value > start.value:
+            start = self.delete(value, start.right)
+        elif value < start.value:
+            start = self.delete(value, start.left)
+        else:
+            raise Exception("Number not in tree")
+        return acc
+
+    def save(self):
+        x = self.traversal('preorder')
+        return x
+
+
+if __name__ == '__main__':
+    tree = BST(10)
+    tree.insert(30)
+    tree.insert(6)
+    tree.insert(100)
+    tree.insert(25)
+    tree.insert(50)
+    tree.delete(100, tree.root)
+    
+    print(tree.save())
