@@ -96,9 +96,18 @@ class BST:
         return acc
 
     def save(self):
-        x = self.traversal('preorder')
-        return x
+        bst_string = self.traversal('preorder')
+        return bst_string
 
+    def restore(self, input_string):
+        input_string_list = input_string.rsplit("-")
+        del input_string_list[len(input_string_list)-1]
+
+        f = BST(input_string_list[0])
+        f.insert(13)
+        for n in input_string_list:
+            f.insert(n)
+        return f
 
 if __name__ == '__main__':
     tree = BST(10)
@@ -107,6 +116,8 @@ if __name__ == '__main__':
     tree.insert(100)
     tree.insert(25)
     tree.insert(50)
-    tree.delete(100, tree.root)
-    
-    print(tree.save())
+    # tree.delete(100, tree.root)
+    n = tree.save()
+    restored = tree.restore(n)
+    restored.insert(49)
+    print(restored.traversal('inorder'))
