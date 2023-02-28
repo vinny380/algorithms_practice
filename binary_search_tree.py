@@ -18,14 +18,14 @@ class BST:
 
         while start != None:
             acc = start
-            if value > start.value:
+            if new_node.value > start.value:
                 start = start.right
-            elif value < start.value:
+            elif new_node.value < start.value:
                 start = start.left
             
         if acc == None:
             acc = new_node
-        elif (value < acc.value):
+        elif (new_node.value < acc.value):
             acc.left = new_node
         else:
             acc.right = new_node
@@ -59,9 +59,9 @@ class BST:
 
     def traversal(self, traversal_type):
         if traversal_type == "preorder":
-            return self.preorder_print(tree.root, "")
+            return self.preorder_print(self.root, "")
         elif traversal_type == "inorder":
-            return self.inorder_print(tree.root, "")
+            return self.inorder_print(self.root, "")
 
     def preorder_print(self, start, traversal):
         if start != None:
@@ -72,9 +72,9 @@ class BST:
 
     def inorder_print(self, start, traversal):
         if start != None:
-            traversal = self.preorder_print(start.left, traversal)
+            traversal = self.inorder_print(start.left, traversal)
             traversal = traversal + str(start.value) + "-"
-            traversal = self.preorder_print(start.right, traversal)
+            traversal = self.inorder_print(start.right, traversal)
         return traversal     
 
     def delete(self, value, start):
@@ -99,15 +99,17 @@ class BST:
         bst_string = self.traversal('preorder')
         return bst_string
 
-    def restore(self, input_string):
-        input_string_list = input_string.rsplit("-")
-        del input_string_list[len(input_string_list)-1]
 
-        f = BST(input_string_list[0])
-        f.insert(13)
-        for n in input_string_list:
-            f.insert(n)
-        return f
+def restore(input_string):
+    input_string_list = input_string.rsplit("-")
+    del input_string_list[len(input_string_list)-1]
+    root = input_string_list[0]
+    tree = BST(root)
+    del input_string_list[0]
+    tree.insert(45)
+    for n in input_string_list:
+        tree.insert(n)
+    return tree
 
 if __name__ == '__main__':
     tree = BST(10)
@@ -116,8 +118,7 @@ if __name__ == '__main__':
     tree.insert(100)
     tree.insert(25)
     tree.insert(50)
-    # tree.delete(100, tree.root)
     n = tree.save()
-    restored = tree.restore(n)
+    restored = restore(n)
     restored.insert(49)
     print(restored.traversal('inorder'))
