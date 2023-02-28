@@ -9,9 +9,9 @@ class tree:
 
   def traversal(self, traversal_type):
     if traversal_type == "preorder":
-      return self.preorder_print(tree.root, "")
+      return self.preorder_print(self.root, "")
     elif traversal_type == "inorder":
-      return self.inorder_print(tree.root, "")
+      return self.inorder_print(self.root, "")
 
   def preorder_print(self, start, traversal):
     if start != None:
@@ -22,9 +22,9 @@ class tree:
 
   def inorder_print(self, start, traversal):
     if start != None:
-      traversal = self.preorder_print(start.left, traversal)
+      traversal = self.inorder_print(start.left, traversal)
       traversal = traversal + str(start.value) + "-"
-      traversal = self.preorder_print(start.right, traversal)
+      traversal = self.inorder_print(start.right, traversal)
     return traversal
 
   def max_value(self):
@@ -44,7 +44,7 @@ tree.root.left.right = tree_node(7)
 tree.root.right.left = tree_node(17)
 tree.root.right.right = tree_node(22)
 tree.root.right.right.right= tree_node(44)
-print(tree.max_value())
+# print(tree.max_value())
 
 # NLR
 #10 - 5 - 3 - 7 - 20 - 17 - 22
