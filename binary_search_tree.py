@@ -29,7 +29,7 @@ class BST:
             acc.left = new_node
         else:
             acc.right = new_node
-        
+ 
         return acc
 
 
@@ -77,7 +77,7 @@ class BST:
             traversal = self.inorder_print(start.right, traversal)
         return traversal     
 
-    def delete(self, value, start):
+    def delete(self, value):
         acc = None 
         if start.value == value:
             if start.right != None:
@@ -99,17 +99,19 @@ class BST:
         bst_string = self.traversal('preorder')
         return bst_string
 
-
-def restore(input_string):
-    input_string_list = input_string.rsplit("-")
-    del input_string_list[len(input_string_list)-1]
-    root = input_string_list[0]
-    tree = BST(root)
-    del input_string_list[0]
-    tree.insert(45)
-    for n in input_string_list:
-        tree.insert(n)
-    return tree
+    def restore(self, input_string):
+        input_string_list = input_string.rsplit("-")
+        del input_string_list[len(input_string_list)-1]
+        root = input_string_list[0]
+        tree = BST(root)
+        del input_string_list[0]
+        tree.insert(45)
+        for n in input_string_list:
+            tree.insert(n)
+        return tree
+    
+    def get_total_height(self):
+        pass
 
 if __name__ == '__main__':
     tree = BST(10)
@@ -119,6 +121,8 @@ if __name__ == '__main__':
     tree.insert(25)
     tree.insert(50)
     n = tree.save()
-    restored = restore(n)
+    restored = tree.restore('10-19-2934-')
     restored.insert(49)
-    print(restored.traversal('inorder'))
+    restored.insert(1000)
+
+    print(restored.traversal('preorder'))
