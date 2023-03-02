@@ -25,123 +25,151 @@ def parse_file(file):
 def remove_stopwords(text):
     return " ".join([word for word in str(text).split() if word not in stop_words])
 
-
+'''All nodes will have a value, left and right children (This could be None) and frequency.'''
 class  AVLTreeMapNode:
     def __init__(self, word):
-        self.value = word
+        self.value = str(word)
         self.left = self.right = None
         self.frequency = self.height = 1
 
 class AVLTreeMap:
-    def __init__(self,root):
-        self.root = AVLTreeMapNode(root)
+    def __init__(self):
+        self.root = None
 
     def insert(self, value):
-        self.root = self.insert_helper(self.root, value)
+        self.root = self.insert_recursive(self.root, value)
         
-    def insert_helper(self, node, value):
+    def insert_recursive(self, node, value):
         # Perform regular BST insertion
-        if not node:
+        if node == None:
             return AVLTreeMapNode(value)
         elif value < node.value:
-            node.left = self.insert_helper(node.left, value)
+            node.left = self.insert_recursive(node.left, value)
         elif value > node.value:
-            node.right = self.insert_helper(node.right, value)
+            node.right = self.insert_recursive(node.right, value)
         else:
             node.frequency += 1
         
-        # Update the height of the current node
-        node.height = 1 + max(self.get_height(node.left), self.get_height(node.right))
+        node.height = 1 + max(self.height(node.left), self.height(node.right))   # Update the height of the current node
         
-        # Check if the node is balanced
-        balance = self.get_balance(node)
+        balance = self.balance(node)        # Check if the node is balanced
         
         # If the node is unbalanced, balance it
         if balance > 1:
-            if self.get_balance(node.left) < 0:
+            if self.balance(node.left) < 0:
                 node.left = self.rotate_left(node.left)
             return self.rotate_right(node)
         elif balance < -1:
-            if self.get_balance(node.right) > 0:
+            if self.balance(node.right) > 0:
                 node.right = self.rotate_right(node.right)
             return self.rotate_left(node)
         
         return node
         
-    def rotate_right(self, node):
-        new_root = node.left
-        node.left = new_root.right
-        new_root.right = node
-        
-        node.height = 1 + max(self.get_height(node.left), self.get_height(node.right))
-        new_root.height = 1 + max(self.get_height(new_root.left), self.get_height(new_root.right))
-        
-        return new_root
-        
+
+    '''Returns the new root when a left rotation is performed'''    
     def rotate_left(self, node):
         new_root = node.right
         node.right = new_root.left
         new_root.left = node
         
-        node.height = 1 + max(self.get_height(node.left), self.get_height(node.right))
-        new_root.height = 1 + max(self.get_height(new_root.left), self.get_height(new_root.right))
+        node.height = 1 + max(self.height(node.left), self.height(node.right))
+        new_root.height = 1 + max(self.height(new_root.left), self.height(new_root.right))
+        
+        return new_root        
+
+
+    '''Returns the new root when a right rotation is performed'''
+    def rotate_right(self, node):
+        new_root = node.left
+        node.left = new_root.right
+        new_root.right = node
+        
+        node.height = 1 + max(self.height(node.left), self.height(node.right))
+        new_root.height = 1 + max(self.height(new_root.left), self.height(new_root.right))
         
         return new_root
-        
-    def get_height(self, node):
-        if not node:
+    
+
+    '''Returns the height of a given node'''
+    def height(self, node):
+        if node == None:
             return 0
         return node.height
-        
-    def get_balance(self, node):
-        if not node:
-            return 0
-        return self.get_height(node.left) - self.get_height(node.right)
-        
-    def print_tree(self):
-        if not self.root:
-            return
-        self.print_helper(self.root)
-        
-    def print_helper(self, node):
-        if node:
-            self.print_helper(node.left)
-            print("{0}, {1}\n".format(node.value, node.frequency), end=" ")
-            self.print_helper(node.right)
 
+
+    '''Returns the balance of a given node'''    
+    def balance(self, node):
+        if node == None:
+            return 0
+        return self.height(node.left) - self.height(node.right)
+
+
+    '''Returns a string version of the tree
+    traversal_type has 3 options - preorder, inorder, postorder
+    '''
     def traversal(self, traversal_type):
         if traversal_type == "preorder":
             return self.preorder_print(self.root, "")
         elif traversal_type == "inorder":
             return self.inorder_print(self.root, "")
+        elif traversal_type == "postorder":
+            return self.postorder_print(self.root, "")
+        else:       # Raises exception in case the user gives a non-acceptable parameter.
+            raise Exception('''Choose a valid traversal type:\n
+            * preorder\n
+            * inorder\n
+            * postorder
+            ''')
 
+
+    '''Performs a preorder print'''
     def preorder_print(self, start, traversal):
         if start != None:
-            traversal = traversal + str(start.value) + "-"
+            traversal = print(f"{start.value}, {start.frequency}\n", end=" ")
             traversal = self.preorder_print(start.left, traversal)
             traversal = self.preorder_print(start.right, traversal)
         return traversal
 
+
+    '''Performs an inorder print'''
     def inorder_print(self, start, traversal):
         if start != None:
             traversal = self.inorder_print(start.left, traversal)
-            traversal = traversal + str(start.value) + "-"
+            traversal = print(f"{start.value}, {start.frequency}\n", end=" ")
             traversal = self.inorder_print(start.right, traversal)
-        return traversal   
+        return traversal  
 
 
-    ''' 
-    This function aims to read content from 
-    a file and save word-frequency information
-    for all words appearing in the file in the AVLTreeMap
+    '''Performs a postorder print'''
+    def postorder_print(self, start, traversal):
+        if start != None:
+            traversal = self.postorder_print(start.left, traversal)
+            traversal = self.postorder_print(start.right, traversal)
+            traversal = print(f"{start.value}, {start.frequency}\n", end=" ")
+        return traversal  
+
+
+    '''Returns an AVL Tree (avl_tree)
+    file_path is a string.
     '''
-def load_from_file(file_path):
-    words = parse_file(file_path)
-    avl_tree = AVLTreeMap(words[0])
-    for word in words[1:]:
-        avl_tree.insert(word)
-    return avl_tree.traversal("inorder")
-
+    def load_from_file(self, file_path):
+        words = parse_file(file_path)
+        avl_tree = AVLTreeMap()         # Creating instance of tree
+        for word in words:              # Adding all the words in the list words to the tree.
+            avl_tree.insert(word)
+        return avl_tree
 
 if __name__ == "__main__":
-    load_from_file('test.txt')
+    tree = AVLTreeMap()
+
+    #test.txt contains: Binary search tree is a special binary tree
+    j = tree.load_from_file('test.txt')
+    '''It prints:
+    search, 1
+    binary, 2
+    tree, 2
+    special, 1
+    '''
+    print(j.traversal('preorder'))
+
