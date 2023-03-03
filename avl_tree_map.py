@@ -128,7 +128,7 @@ class AVLTreeMap:
             ''')
 
 
-    '''Performs a preorder print'''
+    '''Performs a preorder print along with the frequency'''
     def preorder_print(self, start, traversal):
         if start != None:
             traversal = print(f"{start.value}, {start.frequency}\n", end=" ")
@@ -137,7 +137,7 @@ class AVLTreeMap:
         return traversal
 
 
-    '''Performs an inorder print'''
+    '''Performs an inorder print along with the frequency'''
     def inorder_print(self, start, traversal):
         if start != None:
             traversal = self.inorder_print(start.left, traversal)
@@ -146,7 +146,7 @@ class AVLTreeMap:
         return traversal  
 
 
-    '''Performs a postorder print'''
+    '''Performs a postorder print along with the frequency'''
     def postorder_print(self, start, traversal):
         if start != None:
             traversal = self.postorder_print(start.left, traversal)
@@ -168,7 +168,7 @@ class AVLTreeMap:
 if __name__ == "__main__":
     tree = AVLTreeMap()
 
-    #test.txt contains: Binary search tree is a special binary tree
+    #test.txt contains "Binary search tree is a special binary tree"
     j = tree.load_from_file('test.txt')
     '''It prints:
     search, 1
