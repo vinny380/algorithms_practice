@@ -37,16 +37,16 @@ class AVLTreeMap:
         self.root = None
 
     def insert(self, value):
-        self.root = self.insert_recursive(self.root, value)
+        self.root = self.__insert_recursive(self.root, value)
         
-    def insert_recursive(self, node, value):
+    def __insert_recursive(self, node, value):
         # Perform regular BST insertion
         if node == None:
             return AVLTreeMapNode(value)
         elif value < node.value:
-            node.left = self.insert_recursive(node.left, value)
+            node.left = self.__insert_recursive(node.left, value)
         elif value > node.value:
-            node.right = self.insert_recursive(node.right, value)
+            node.right = self.__insert_recursive(node.right, value)
         else:
             node.frequency += 1
         

@@ -84,17 +84,17 @@ class BST:
 
 
     def delete(self, value):
-        self.root = self.delete_recursive(self.root, value)
+        self.root = self.__delete_recursive(self.root, value)
 
 
-    def delete_recursive(self, start, value):
+    def __delete_recursive(self, start, value):
         if start is None:
             return None
         
         if value > start.value:
-            start.right = self.delete_recursive(start.right, value)
+            start.right = self.__delete_recursive(start.right, value)
         elif value < start.value:
-            start.left = self.delete_recursive(start.left, value)
+            start.left = self.__delete_recursive(start.left, value)
         else: # start.value == value
             if start.right is None:
                 return start.left
@@ -105,7 +105,7 @@ class BST:
                 while current.left is not None:
                     current = current.left
                 start.value = current.value
-                start.right = self.delete_recursive(start.right, current.value)
+                start.right = self.__delete_recursive(start.right, current.value)
         return start
 
 
@@ -129,7 +129,17 @@ class BST:
     
     
     def get_total_height(self):
-        pass
+        return self.__get_total_height_recursive(self.root)
+        
+
+    def __get_total_height_recursive(self, node):
+        if node == None:
+            return
+        
+        left_height = self.__get_total_height_recursive(node.left)
+        right_height = self.__get_total_height_recursive(node.right)
+        
+        return max(left_height, right_height) + 1
 
 if __name__ == '__main__':
     tree = BST(10)
@@ -146,3 +156,4 @@ if __name__ == '__main__':
     # restored.insert(1000)
     print(tree.root.value)
     print(tree.traversal('preorder'))
+    print(tree.get_total_height_recursive(tree.root))
