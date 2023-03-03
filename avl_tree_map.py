@@ -32,13 +32,18 @@ class  AVLTreeMapNode:
         self.left = self.right = None
         self.frequency = self.height = 1
 
+
 class AVLTreeMap:
     def __init__(self):
         self.root = None
 
+
+    '''Inserts a value in the tree'''
     def insert(self, value):
         self.root = self.__insert_recursive(self.root, value)
         
+    
+    '''Inserts a value in the tree starting from a given node'''
     def __insert_recursive(self, node, value):
         # Perform regular BST insertion
         if node == None:
