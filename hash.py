@@ -2,7 +2,7 @@ import re
 import string
 from linked import LinkedList, Node
 
-def parse_file(file):
+def parse_file(file: str) -> str:
     with open(file, 'r') as input:
         content = input.readlines()
     preprocessed = []
@@ -17,7 +17,7 @@ def parse_file(file):
         line = re.sub(' +', ' ', line)
         if line:
             preprocessed.extend(line.split(" "))
-    print(" ".join(preprocessed))
+    # print(" ".join(preprocessed))
     return preprocessed
 
 class OpenHashTable:
@@ -97,7 +97,7 @@ class OpenHashTable:
 if __name__ == '__main__':
     hashtable = OpenHashTable(100)
     j = hashtable.load_from_file('A3test.txt')
-    print(j)
-    lista = my_list = ['while', 'chatgpt', 'can', 'be', 'a', 'helpful', 'resource', 'for', 'answering', 'questions']
+    lista = my_list = ['while', 'chatgpt', 'can', 'be', 'a', 'Vinicius', 'Alice', 'Bro', 'Jax', 'Sao']
     for n in lista:
-        j.search(n)
+        print(n)
+        print(j.search(n), '\n')
