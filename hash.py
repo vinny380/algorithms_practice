@@ -2,7 +2,7 @@ import re
 import string
 from linked import LinkedList, Node
 
-def parse_file(file: str) -> str:
+def parse_file(file: str) -> list:
     with open(file, 'r') as input:
         content = input.readlines()
     preprocessed = []
@@ -21,7 +21,7 @@ def parse_file(file: str) -> str:
     return preprocessed
 
 
-def parse_list(unparsed_list: list) -> str:
+def parse_list(unparsed_list: list) -> list:
     preprocessed = []
     for word in unparsed_list:
         word = word.strip().lower()
@@ -71,16 +71,18 @@ class OpenHashTable:
             self.table.append(None)
             self.load_factors()
 
-    def search(self, key: str) -> int:
+    def search(self, key: str) -> tuple:
         bucket_number = self.hash_func(key)
 
         bucket = self.table[bucket_number]
 
         if bucket is not None:
             start = bucket.head
+            steps = 0
             while start:
+                steps+=1
                 if start.data == key:
-                    return start.frequency
+                    return start.frequency, steps
                 start = start.next 
         else:
             return -1
@@ -91,7 +93,7 @@ class OpenHashTable:
             n = self.search(word)  
             if n is not None:
                 print(word)
-                print(f'Frequency: {n}\n')              
+                print(f'Frequency: {n[0]}, Search steps: {n[1]}\n')       
 
 
     def load_factors(self) -> None:
