@@ -20,6 +20,18 @@ def parse_file(file: str) -> str:
     # print(" ".join(preprocessed))
     return preprocessed
 
+
+def parse_list(unparsed_list: list) -> str:
+    preprocessed = []
+    for word in unparsed_list:
+        word = word.strip().lower()
+        word = word.translate(str.maketrans('', '', string.punctuation))
+        word = re.sub('\d+','', word)
+        word = re.sub(' +', ' ', word)
+        if word:
+            preprocessed.extend(word.split(" "))
+    return preprocessed    
+
 class OpenHashTable:
     def __init__(self, size: int) -> None:
         self.table = [None] * size
@@ -73,6 +85,14 @@ class OpenHashTable:
         else:
             return -1
 
+    def search_list(self, unparsed_list:list) -> None:
+        new_list = parse_list(unparsed_list)
+        for word in new_list:
+            n = self.search(word)  
+            if n is not None:
+                print(word)
+                print(f'Frequency: {n}\n')              
+
 
     def load_factors(self) -> None:
         buckets_taken = 0
@@ -86,7 +106,7 @@ class OpenHashTable:
         return f"{'->'.join(str(i) for i in self.table[:])}"  
 
 
-    def load_from_file(self, file_path: str):
+    def load_from_file(self, file_path: str) -> 'OpenHashTable':
         words = parse_file(file_path)
         hashtable = OpenHashTable(self.size)
         for word in words:              # Adding all the words in the list words to the tree.
@@ -96,8 +116,12 @@ class OpenHashTable:
 
 if __name__ == '__main__':
     hashtable = OpenHashTable(100)
-    j = hashtable.load_from_file('A3test.txt')
-    lista = my_list = ['while', 'chatgpt', 'can', 'be', 'a', 'Vinicius', 'Alice', 'Bro', 'Jax', 'Sao']
-    for n in lista:
-        print(n)
-        print(j.search(n), '\n')
+    loaded_hash = hashtable.load_from_file('A3test.txt')
+   
+    K10 = ['research', 'lead', 'sole', 'supplement', 'best', 'too', 'obtained', 'academic', 'ethical', 'reputable']
+    K20 = ['verify', 'source', 'supplement', 'assignment', 'response', 'limitations', 'irrelevant', 'integrity', 'process', 'effort', 'obtained', 'ChatGPT', 'ethical', 'information', 'pasting', 'incomplete', 'ask', 'completing', 'reputable', 'sources']
+    K30 = ['content,', 'academic', 'responses.', 'supplement', 'broad,', 'verify', 'critically', 'source.', 'ethics', 'questions', 'relevant', 'limitations', 'necessary', 'ChatGPT', 'obtained', 'words', 'process', 'plagiarism,', 'integrity', 'response', 'analyze', 'information', 'open-ended', 'incomplete', 'irrelevant', 'sources', 'ethical', 'reputable', 'assignment', 'accuracy']
+    K40 = ['verify', 'relevant', 'limitations', 'plagiarism,', 'reputable', 'supplement', 'pasting', 'academic', 'broad,', 'incomplete', 'process', 'critically', 'ethical', 'source.', 'integrity', 'irrelevant', 'ChatGPT', 'response', 'words', 'questions', 'completing', 'ask', 'obtained', 'information', 'ethics', 'analyze', 'necessary', 'accuracy', 'research', 'open-ended', 'assignment', 'effort', 'content,', 'sources', 'lead', 'sole', 'best', 'too']
+    K50 = ['verify', 'necessary', 'source.', 'process', 'limitations', 'critically', 'incomplete', 'supplement', 'ethical', 'integrity', 'pasting', 'completing', 'obtained', 'academic', 'ChatGPT', 'questions', 'research', 'assignment', 'accuracy', 'response', 'ethical', 'effort', 'reputable', 'analyze', 'information', 'open-ended', 'irrelevant', 'words', 'sources', 'plagiarism,', 'ask', 'relevant', 'content,', 'lead', 'sole', 'best', 'too', 'ethical', 'ChatGPT', 'words', 'process', 'assignment', 'supplement', 'research', 'obtained']
+
+    loaded_hash.search_list(K10)

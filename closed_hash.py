@@ -2,7 +2,7 @@ import re
 import string
 from linked import LinkedList, Node
 
-def parse_file(file):
+def parse_file(file: str) -> str:
     with open(file, 'r') as input:
         content = input.readlines()
     preprocessed = []
@@ -17,8 +17,20 @@ def parse_file(file):
         line = re.sub(' +', ' ', line)
         if line:
             preprocessed.extend(line.split(" "))
-    print(" ".join(preprocessed))
+    # print(" ".join(preprocessed))
     return preprocessed
+    
+
+def parse_list(unparsed_list: list) -> str:
+    preprocessed = []
+    for word in unparsed_list:
+        word = word.strip().lower()
+        word = word.translate(str.maketrans('', '', string.punctuation))
+        word = re.sub('\d+','', word)
+        word = re.sub(' +', ' ', word)
+        if word:
+            preprocessed.extend(word.split(" "))
+    return preprocessed    
 
 class ClosedHashTable:
     def __init__(self, size: int) -> None:
@@ -65,7 +77,7 @@ class ClosedHashTable:
             self.table[a].insert(word_node)                  
 
 
-    def search(self, key: str) -> int:
+    def search(self, key: str) -> tuple:
         bucket_number = self.hash_func(key)
         probing_step = 0
         a = bucket_number
@@ -80,16 +92,24 @@ class ClosedHashTable:
             start = bucket.head
             while start:
                 if start.data == key:
-                    return start.frequency
+                    return start.frequency, probing_step
                 start = start.next 
         else:
             return -1
+
+    def search_list(self, unparsed_list:list) -> None:
+        new_list = parse_list(unparsed_list)
+        for word in new_list:
+            n = self.search(word)  
+            if n is not None:
+                print(word)
+                print(f'Frequency: {n[0]}, Probing steps: {n[1]}\n')       
 
     def __str__(self) -> str:
         return f"{'->'.join(str(i) for i in self.table[:])}"              
 
 
-    def delete(self, value):
+    def delete(self, value: str) -> None:
         bucket_number = self.hash_func(value)
         probing_step = 0
         a = bucket_number
@@ -110,7 +130,7 @@ class ClosedHashTable:
                 start = start.next             
 
 
-    def load_from_file(self, file_path: str):
+    def load_from_file(self, file_path: str) -> "ClosedHashTable":
         words = parse_file(file_path)
         hashtable = ClosedHashTable(self.size)
         for word in words:              # Adding all the words in the list words to the tree.
@@ -119,14 +139,13 @@ class ClosedHashTable:
 
 
 if __name__ == '__main__':
-    hashtable = ClosedHashTable(10)
-    j = hashtable.load_from_file('A3test.txt')
-    # print(j)
-    lista = my_list = ['while', 'chatgpt', 'can', 'be', 'a', 'helpful', 'resource', 'for', 'answering', 'questions']
-    for n in lista:
-        print(n)
-        print(j.search(n), '\n') 
+    hashtable = ClosedHashTable(1000)
+    loaded_hash = hashtable.load_from_file('A3test.txt')
+   
+    K10 = ['research', 'lead', 'sole', 'supplement', 'best', 'too', 'obtained', 'academic', 'ethical', 'reputable']
+    K20 = ['verify', 'source', 'supplement', 'assignment', 'response', 'limitations', 'irrelevant', 'integrity', 'process', 'effort', 'obtained', 'ChatGPT', 'ethical', 'information', 'pasting', 'incomplete', 'ask', 'completing', 'reputable', 'sources']
+    K30 = ['content,', 'academic', 'responses.', 'supplement', 'broad,', 'verify', 'critically', 'source.', 'ethics', 'questions', 'relevant', 'limitations', 'necessary', 'ChatGPT', 'obtained', 'words', 'process', 'plagiarism,', 'integrity', 'response', 'analyze', 'information', 'open-ended', 'incomplete', 'irrelevant', 'sources', 'ethical', 'reputable', 'assignment', 'accuracy']
+    K40 = ['verify', 'relevant', 'limitations', 'plagiarism,', 'reputable', 'supplement', 'pasting', 'academic', 'broad,', 'incomplete', 'process', 'critically', 'ethical', 'source.', 'integrity', 'irrelevant', 'ChatGPT', 'response', 'words', 'questions', 'completing', 'ask', 'obtained', 'information', 'ethics', 'analyze', 'necessary', 'accuracy', 'research', 'open-ended', 'assignment', 'effort', 'content,', 'sources', 'lead', 'sole', 'best', 'too']
+    K50 = ['verify', 'necessary', 'source.', 'process', 'limitations', 'critically', 'incomplete', 'supplement', 'ethical', 'integrity', 'pasting', 'completing', 'obtained', 'academic', 'ChatGPT', 'questions', 'research', 'assignment', 'accuracy', 'response', 'ethical', 'effort', 'reputable', 'analyze', 'information', 'open-ended', 'irrelevant', 'words', 'sources', 'plagiarism,', 'ask', 'relevant', 'content,', 'lead', 'sole', 'best', 'too', 'ethical', 'ChatGPT', 'words', 'process', 'assignment', 'supplement', 'research', 'obtained']
 
-
-    # for i in hashtable.table:
-    #     print(i)
+    loaded_hash.search_list(K10)
