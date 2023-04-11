@@ -93,6 +93,33 @@ class Graph:
             mst_weight.append(i[0][0])
         return sum(mst_weight)
 
+    def experiment(self, k=5):
+        n_values = [20, 40, 60]
+        k = k
+        
+        for n in n_values:
+            diff_total = 0
+            for i in range(k):
+                # Generate random graph
+                graph = Graph(n)
+                
+                # Find minimum spanning tree using BFS
+                bfs_tree = graph.bfs()
+                bfs_weight = bfs_tree.mst_weight()
+                
+                # Find minimum spanning tree using Prim's algorithm
+                prim_tree = graph.prim()
+                prim_weight = prim_tree.mst_weight()
+                
+                # Compute difference between BFS and Prim's MST weights
+                diff = ((bfs_weight - prim_weight) / prim_weight) * 100
+                diff_total += diff
+                
+            # Compute average difference
+            avg_diff = diff_total / k
+            
+            # return results
+            return f"Average difference for n={n}: {avg_diff}%"        
 
 if __name__ == '__main__':
     
@@ -109,29 +136,3 @@ if __name__ == '__main__':
 #     # bfs_weight = sum([edge[2] for edge in bfs_tree])
 #     # print(bfs_tree)
 
-    n_values = [20, 40, 60]
-    k = 5
-    
-    for n in n_values:
-        diff_total = 0
-        for i in range(k):
-            # Generate random graph
-            graph = Graph(n)
-            
-            # Find minimum spanning tree using BFS
-            bfs_tree = graph.bfs()
-            bfs_weight = bfs_tree.mst_weight()
-            
-            # Find minimum spanning tree using Prim's algorithm
-            prim_tree = graph.prim()
-            prim_weight = prim_tree.mst_weight()
-            
-            # Compute difference between BFS and Prim's MST weights
-            diff = ((bfs_weight - prim_weight) / prim_weight) * 100
-            diff_total += diff
-            
-        # Compute average difference
-        avg_diff = diff_total / k
-        
-        # Print results
-        print(f"Average difference for n={n}: {avg_diff}%")
